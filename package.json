@@ -1,0 +1,25 @@
+{
+  "name": "nodebb-plugin-newposthook",
+  "version": "0.2.3",
+  "description": "A simple plugin notifying an external service when a post is created",
+  "main": "library.js",
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [
+    "nodebb",
+    "plugin"
+  ],
+  "author": {
+    "name": "vigliag",
+    "email": "vigliag@hotmail.com"
+  },
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "nbbpm": {
+    "compatibility": "^1.0.0"
+  },
+  "dependencies": {
+    "axios": "^0.16.2"
+  }
+}
