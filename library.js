@@ -1,9 +1,10 @@
 "use strict";
 
 var meta = require.main.require('./src/meta');
+var nconf = module.parent.require('nconf');
 
 let settings = null;
-meta.settings.get('newposthook', function(err, sett) {
+meta.settings.get('simple-telegram-notification', function(err, sett) {
 	settings = sett;
 });
 
@@ -20,15 +21,15 @@ plugin.init = function(params, callback) {
 	// We create two routes for every view. One API call, and the actual route itself.
 	// Just add the buildHeader middleware to your route and NodeBB will take care of everything for you.
 
-	router.get('/admin/plugins/newposthook', hostMiddleware.admin.buildHeader, controllers.renderAdminPage);
-	router.get('/api/admin/plugins/newposthook', controllers.renderAdminPage);
+	router.get('/admin/plugins/simple-telegram-notification', hostMiddleware.admin.buildHeader, controllers.renderAdminPage);
+	router.get('/api/admin/plugins/simple-telegram-notification', controllers.renderAdminPage);
 
 	callback();
 };
 
 plugin.addAdminNavigation = function(header, callback) {
 	header.plugins.push({
-		route: '/plugins/newposthook',
+		route: '/plugins/simple-telegram-notification',
 		icon: 'fa-tint',
 		name: 'New Post Hook'
 	});
@@ -37,21 +38,30 @@ plugin.addAdminNavigation = function(header, callback) {
 };
 
 plugin.onTopicCreated = function(data, callback){
-	var payload = {
-		topic: data.topic,
-		content: data.data.content
+	let token = settings.token;
+	let recipient = settings.recipient;
+
+	if(!token || !recipient){
+		console.log("token or recipient not set");
+		return callback(null, data);
 	} 
 
-	if(settings.url){
-		var url = settings.url + '/topic';
-		console.log(" sending " + url + " " + JSON.stringify(payload));
+	console.log("TOPIC :" + JSON.stringify({topic: data.topic, content: data.data.content}));
 
-		axios.post(url, payload).then(function(){
-			console.log("success")
-		}).catch(function(e){
-			console.error(e.message);
-		});
+	var telegramUrl = "https://api.telegram.org/bot" + token + "/sendMessage";
+
+	var topicLink = nconf.get('url') + '/topic/' + data.topic.slug
+	var payload = {
+		chat_id : recipient,
+		text : "Nuovo topic " + data.topic.title + " sul forum " + topicLink
 	}
+
+	axios.post(telegramUrl, payload).then(function(res){
+		console.log("success!");
+		console.log(res);
+	}).catch(function(e){
+		console.error(e.message);
+	});
 
 	callback(null, data);
 }

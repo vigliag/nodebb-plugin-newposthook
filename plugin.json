@@ -1,6 +1,6 @@
 {
-	"id": "nodebb-plugin-newposthook",
-	"url": "https://github.com/vigliag/nodebb-plugin-newposthook",
+	"id": "nodebb-plugin-simple-telegram-notification",
+	"url": "https://github.com/vigliag/nodebb-plugin-simple-telegram-notification",
 	"library": "./library.js",
 	"hooks": [
 		{

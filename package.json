@@ -1,7 +1,7 @@
 {
-  "name": "nodebb-plugin-newposthook",
+  "name": "nodebb-plugin-simple-telegram-notification",
   "version": "0.2.3",
-  "description": "A simple plugin notifying an external service when a post is created",
+  "description": "A simple plugin notifying a telegram chat service when a topic is created",
   "main": "library.js",
   "repository": {
     "type": "git"
